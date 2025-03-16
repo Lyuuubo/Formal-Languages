@@ -17,4 +17,4 @@ transitions = {
 ini = q0
 finals = {q3}
 
-/*Write your full name here: Lybuomyr Grygoriv*/
+/*Write your full name here: Lyubomyr Grygoriv*/
