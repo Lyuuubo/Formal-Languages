@@ -4,5 +4,16 @@
     L= {w | w contains the substring 01}. 
 */
 
+states = {q0, q1, q2}
+transitions = {
+    (q0, 0, q1),
+    (q0, 1, q0),
+    (q1, 0, q1),
+    (q1, 1, q2),
+    (q2, 0, q2),
+    (q2, 1, q2)
+}
+ini = q0
+finals = {q2}
 
 /*Write your full name here: ...*/
