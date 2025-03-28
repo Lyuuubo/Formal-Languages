@@ -17,4 +17,4 @@ transitions = {
 ini = q0
 finals = {q3}
 
-/*Write your full name here: ...*/
+/*Write your full name here: Satxa Fortuny*/

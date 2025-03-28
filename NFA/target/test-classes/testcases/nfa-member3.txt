@@ -21,4 +21,4 @@ transitions = {
 ini = q0
 finals = {q1, q5}
 
-/*Write your full name here: ...*/
+/*Write your full name here: Raúl Garcia*/
