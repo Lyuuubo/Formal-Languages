@@ -20,7 +20,10 @@ public class Test {
 
     @ParameterizedTest
     @CsvSource({
-            "testcases/nfa1.txt, testcases/input1.txt, testcases/output1.txt",
+            "testcases/nfa1.txt, testcases/inputTest1.txt, testcases/outputTest1.txt",
+            "testcases/nfa-member1.txt, testcases/input1.txt, testcases/output1.txt",
+            "testcases/nfa-member2.txt, testcases/input2.txt, testcases/output2.txt",
+            "testcases/nfa-member3.txt, testcases/input3.txt, testcases/output3.txt",
     })   
     public void testOnDefaultInput(String nfaSpecFilePath, String inputFilePath, String outputFilePath) throws IOException, URISyntaxException {
         //Loading files

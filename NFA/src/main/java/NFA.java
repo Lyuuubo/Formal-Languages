@@ -1,12 +1,8 @@
 /*A class that models NFAs. States are just strings while labels
  * are characters. 
  */
-
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-
-import org.antlr.v4.parse.ANTLRParser.actionScopeName_return;
 
 public class NFA {
     private class Node{
@@ -14,12 +10,14 @@ public class NFA {
         public boolean isInitial;
         public boolean isLast;
         public List<Transition> listTransitions;
+        public boolean hasEpsilon;
 
         public Node(String state, boolean init, boolean fin){
             this.state = state;
             this.isInitial = init;
             this.isLast = fin;
             listTransitions = new LinkedList<>();
+            hasEpsilon = false;
         }
 
         public String getState(){
@@ -39,7 +37,6 @@ public class NFA {
 
     private List<Node> statesNFA;
     private Node initial;
-    private boolean valid;
     
     /*
      * A constructor that builds a NFA with the set of state names
@@ -73,6 +70,7 @@ public class NFA {
                     .filter(node -> node.getState().equalsIgnoreCase(nextState))
                     .findFirst().get();
         init.listTransitions.add(new Transition('$', toNode));
+        init.hasEpsilon = true;
     }
 
     /* Mark a state in the DFA as final */
@@ -96,34 +94,32 @@ public class NFA {
      * Otherwise it outputs false.
      */
     public boolean accept(String string) {
-        valid = false;
-        this.acceptAux(this.initial, string);
-
-        return valid;
+        return this.acceptAux(this.initial, string);
     }
 
-    private void acceptAux(Node current, String string){
-        Node currentNode = current;
-        String left = "";
-        for (int i = 0; i < string.length(); i++){
-            Character transition = string.charAt(i);
-            if (i < string.length()-1) left = string.substring(i+1);
-            else left = null;
-            currentNode = this.nextNodes(currentNode, transition, left);
-            if (currentNode == null) break;
-            if (valid) break;
+    private boolean acceptAux(Node current, String string){
+        if (string.isEmpty() && !current.hasEpsilon){
+            return current.isLast;
         }
-        if (currentNode.isLast) valid = true;
+        else {
+            Character transition;
+            if (!string.isEmpty()) transition = string.charAt(0);
+            else transition = '$';
+            List<Transition> nextNode = this.nextNodes(current, transition);
+            if (nextNode.isEmpty()) return false;
+            for (Transition tran:nextNode){
+                if (tran.input.equals('$') && this.acceptAux(tran.toNode, string)) return true;
+                if (!tran.input.equals('$') && this.acceptAux(tran.toNode, string.substring(1))) return true;
+            }
+        }
+        return false;
     }
-    
-    private Node nextNodes(Node current, Character input, String left){
-        if (left != null){
-            Node epsilonNode = null;
-        } 
+
+    private List<Transition> nextNodes(Node current, Character input){
+        List<Transition> next = new LinkedList<>();
         for (Transition t:current.listTransitions){
-            if (t.input.equals(input)) return t.toNode;
+            if (t.input.equals(input) || t.input.equals('$')) next.add(t);
         }
-        return null;
+        return next;
     }
-
 }
